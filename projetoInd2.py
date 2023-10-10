@@ -1,5 +1,7 @@
 #Receber as avaliações e fazer append pra um dicionario
-applicant = {}
+applicant = {
+    "Fantasma": ["E8", "T3", "P5","S7"]
+}
 runMenu = True
 
 def createApplicant():
@@ -12,33 +14,66 @@ def createApplicant():
     practice = int(input("Digite a nota do teste prático:"))
     soft = int(input("Digite a nota da avaliação de soft skills:"))
 
-    applicant[name] = [interview, theoretical, practice, soft]
+    applicant[name] = [f'E{interview}', f'T{theoretical}', f'P{practice}', f'S{soft}']
 
+def findInDictionary(grades):
+    for key, values in applicant.items():
+        todas_condicoes_atendidas = True
+        
+        for grade in grades:
+            quesito = grade[0]
+            nota_minima = int(grade[1:])
+
+            if any(value.startswith(quesito) for value in values):
+                for value in values:
+                    if value.startswith(quesito):
+                        numeric_value = int(value[1:])
+                        if numeric_value < nota_minima:
+                            todas_condicoes_atendidas = False
+                            break
+            else:
+                todas_condicoes_atendidas = False
+            
+            if not todas_condicoes_atendidas:
+                break
+        
+        if todas_condicoes_atendidas:
+            print(f'{key} - {"_".join(values)}')
 
 def findApplicant():
     #listar opções
     options = ["Entrevista", "teste teórico", "teste prático", "soft skills", "Todos"]
 
     for i in range(len(options)):
-        print(f'[{i}] {options[i]}')
+        print(f'-> {options[i]}')
     
     run = True
-    
+    grade = []
     while run:
-        arr = []
-        search = input("Selecione um critério: (E/T/P/S) ").upper()
+        
+        search = input("Selecione um critério: (E/T/P/S) ou 0 para sair ").upper()
+
+        if search == '0':
+            num = int(search)
+            if num == 0:
+                break
+                
+
         searchGrade = int(input("Digite a nota: "))
 
         if search == "E":
-            arr.insert(0, searchGrade)
+            grade.append(f"{search}{searchGrade}")
         elif search == "T":
-            arr.insert(1, searchGrade)
+            grade.append(f"{search}{searchGrade}")
         elif search == "P":
-            arr.insert(2, searchGrade)
+            grade.append(f"{search}{searchGrade}")
         elif search == "S":
-            arr.insert(3, searchGrade)
+            grade.append(f"{search}{searchGrade}")
         else:
-            run = False
+            print("Somente aceitamos, (E/T/P/S) ou 0 para sair \n")
+
+    findInDictionary(grade)
+
 
     # f"e{interview}_t{theoretical}_p{practice}_s{soft}"
 
