@@ -1,11 +1,14 @@
 #Receber as avaliações e fazer append pra um dicionario
 applicant = {
-    "Fantasma": ["E8", "T3", "P5","S7"]
+    "Mario": ["E8", "T3", "P5","S7"],
+    "Paula": ["E4", "T6", "P5","S9"],
+    "Yasmin": ["E9", "T7", "P10","S9"],
+    "Paula": ["E2", "T5", "P4","S4"],
 }
 runMenu = True
 
 def createApplicant():
-    name = input("Qual é o nome do candidato?")
+    name = input("\nQual é o nome do candidato?  ")
     print("=" * 20, "\n")
     print("Somente notas de 1 a 10")
 
@@ -18,40 +21,37 @@ def createApplicant():
 
 def findInDictionary(grades):
     for key, values in applicant.items():
-        todas_condicoes_atendidas = True
+        allConditionsTrue = True
         
         for grade in grades:
-            quesito = grade[0]
-            nota_minima = int(grade[1:])
+            category = grade[0]
 
-            if any(value.startswith(quesito) for value in values):
-                for value in values:
-                    if value.startswith(quesito):
-                        numeric_value = int(value[1:])
-                        if numeric_value < nota_minima:
-                            todas_condicoes_atendidas = False
-                            break
-            else:
-                todas_condicoes_atendidas = False
+        
+            for value in values:
+                if value.startswith(category):
+
+                    if int(value[1:]) < int(grade[1:]):
+                        allConditionsTrue = False
+                        break
             
-            if not todas_condicoes_atendidas:
+            if not allConditionsTrue:
                 break
         
-        if todas_condicoes_atendidas:
-            print(f'{key} - {"_".join(values)}')
+        if allConditionsTrue:
+            print(f'\n\033[33m{key} - {"_".join(values)}')
 
 def findApplicant():
     #listar opções
     options = ["Entrevista", "teste teórico", "teste prático", "soft skills", "Todos"]
 
     for i in range(len(options)):
-        print(f'-> {options[i]}')
+        print(f'\n-> {options[i]}') if i == 0 else print(f'-> {options[i]}')
     
     run = True
     grade = []
     while run:
         
-        search = input("Selecione um critério: (E/T/P/S) ou 0 para sair ").upper()
+        search = input("\033[35m\nSelecione um critério: (E/T/P/S) ou 0 para sair ").upper()
 
         if search == '0':
             num = int(search)
@@ -75,24 +75,24 @@ def findApplicant():
     findInDictionary(grade)
 
 
-    # f"e{interview}_t{theoretical}_p{practice}_s{soft}"
-
 def menu():
     #mostra as opções
     while runMenu:
+        print("\n", "\033[35m*" * 40)
         options = ["Inscrever Candidato", "Buscar Candidato", "Sair"]
 
         for i in range(len(options)):
-            print(f'[{i+1}] {options[i]}')
+            print(f'\033[37m[{i+1}] {options[i]}')
 
-        option = int(input("Digite a opção desejada:"))
+        option = int(input("\nDigite a opção desejada: "))
 
         if option == 1:
             createApplicant()
-            print(applicant)
         elif option == 2:
             findApplicant()
         elif option == 3:
-            keep = False
+            break
+        else:
+            print("Erro de digitação! Selecione uma das opções.")
 
 menu()
